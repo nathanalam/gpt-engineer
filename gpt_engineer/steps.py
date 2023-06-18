@@ -166,9 +166,13 @@ def gen_entrypoint(ai, dbs):
         user="Information about the codebase:\n\n" + dbs.workspace["all_output.txt"],
     )
     print()
-    [[lang, command]] = parse_chat(messages[-1]["content"])
-    assert lang in ["", "bash", "sh"]
-    dbs.workspace["run.sh"] = command
+    command_messages = parse_chat(messages[-1]["content"])
+    commands = []
+    for command_message in command_messages:
+        [lang, command] = command_message
+        assert lang in ["", "bash", "sh"]
+        commands.append(command)
+    dbs.workspace["run.sh"] = '\n'.join(commands)
     return messages
 
 

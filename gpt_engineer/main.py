@@ -22,6 +22,7 @@ def chat(
     model: str = "gpt-4",
     temperature: float = 0.1,
     steps_config: str = "default",
+    prompt: str = None
 ):
     app_dir = pathlib.Path(os.path.curdir)
     input_path = project_path
@@ -40,6 +41,9 @@ def chat(
         workspace=DB(workspace_path),
         identity=DB(app_dir / "identity"),
     )
+
+    if prompt is not None:
+        dbs.input['main_prompt'] = prompt
 
     for step in STEPS[steps_config]:
         messages = step(ai, dbs)
